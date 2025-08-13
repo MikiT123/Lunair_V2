@@ -139,7 +139,7 @@ button#toggleThemeBtn:hover {
 }
 
 .cta-btn {
-  background: #ffcc70;
+  background: #64ccdb;
   color: #041e27;
   padding: 12px 25px;
   border-radius: 6px;
@@ -150,10 +150,9 @@ button#toggleThemeBtn:hover {
 }
 
 .cta-btn:hover {
-  background-color: #f1b347;
+  background-color: #64ccdb;
 }
 
-/* Exercises page buttons */
 .exercise-links {
   display: flex;
   flex-direction: column;
@@ -177,7 +176,7 @@ button#toggleThemeBtn:hover {
   background-color: #063847;
 }
 
-/* Dark mode styles */
+/* Dark mode */
 
 body.dark-mode {
   background-color: #041e27;
@@ -203,7 +202,7 @@ body.dark-mode h1 {
 
 body.dark-mode nav a.active,
 body.dark-mode nav a:hover {
-  background-color: #ffcc70;
+  background-color: #64ccdb;
   color: #041e27;
 }
 
