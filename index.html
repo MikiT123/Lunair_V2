@@ -2,119 +2,106 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lunair - Home</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-        #captcha-screen {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #111;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        #captcha-screen img {
-            margin-bottom: 10px;
-            border: 2px solid #fff;
-        }
-        #site-content {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lunair - Home</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Captcha Overlay -->
-    <div id="captcha-screen">
-        <h2>Please complete captcha</h2>
-        <img src="latest.png" alt="Captcha Image" width="200" />
-        <input type="text" id="captcha-input" placeholder="Enter captcha" />
-        <button id="captcha-submit">Submit</button>
-        <p id="captcha-message" style="color:red;"></p>
+  <div id="captcha-screen" class="captcha-overlay">
+    <div class="captcha-box">
+      <h2>Verify You’re Human</h2>
+      <img src="latest.png" alt="Captcha" class="captcha-image" />
+      <input type="text" id="captcha-input" placeholder="Enter Captcha" />
+      <button id="captcha-submit">Submit</button>
+      <p id="captcha-message"></p>
     </div>
+  </div>
 
-```
-<!-- Your Website Content -->
-<div id="site-content">
+  <div id="site-content" style="display:none;">
     <header>
-        <div class="logo-container">
-            <img src="Lunair.png" alt="Lunair Logo" class="logo" />
-        </div>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="exercises.html">Exercises</a>
-        </nav>
+      <div class="logo-container">
+        <img src="Lunair.png" alt="Lunair Logo" class="logo" />
+      </div>
+      <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="exercises.html">Exercises</a>
+      </nav>
     </header>
 
-    <main>
-        <section class="content">
-            <img src="Lunair_White.png" alt="Lunair White Logo" class="logo-white" />
-            <h1>Welcome to Lunair</h1>
-            <p>
-                Vocal Cord Dysfunction (VCD) is a condition where the vocal cords close when they should open,
-                making it difficult to breathe. It can cause symptoms like shortness of breath, throat tightness,
-                and voice changes. While often mistaken for asthma, VCD requires different treatments, including
-                breathing exercises and speech therapy techniques.
-            </p>
-            <button id="toggleThemeBtn" aria-label="Toggle dark mode">Toggle Dark Mode</button>
-        </section>
+```
+<main>
+  <section class="content">
+    <img src="Lunair_White.png" alt="Lunair White Logo" class="logo-white" />
+    <h1>Welcome to Lunair</h1>
+    <p>
+      Vocal Cord Dysfunction (VCD) is a condition where the vocal cords close when they should open,
+      making it difficult to breathe. It can cause symptoms like shortness of breath, throat tightness,
+      and voice changes. While often mistaken for asthma, VCD requires different treatments, including
+      breathing exercises and speech therapy techniques.
+    </p>
+    <button id="toggleThemeBtn" aria-label="Toggle dark mode">Toggle Dark Mode</button>
+  </section>
 
-        <section class="info-cards">
-            <div class="card">
-                <img src="Lungs.png" alt="Lungs Icon" />
-                <h2>What is VCD?</h2>
-                <p>VCD is often mistaken for asthma but requires unique treatments focused on breathing control.</p>
-            </div>
-            <div class="card">
-                <img src="Symptoms.png" alt="Symptoms Icon" />
-                <h2>Symptoms</h2>
-                <p>Shortness of breath, throat tightness, and voice changes during episodes.</p>
-            </div>
-            <div class="card">
-                <img src="Treatment.png" alt="Treatment Icon" />
-                <h2>Treatment</h2>
-                <p>Breathing exercises, speech therapy techniques, and stress management strategies.</p>
-            </div>
-        </section>
+  <section class="info-cards">
+    <div class="card">
+      <img src="Lungs.png" alt="Lungs Icon" />
+      <h2>What is VCD?</h2>
+      <p>VCD is often mistaken for asthma but requires unique treatments focused on breathing control.</p>
+    </div>
+    <div class="card">
+      <img src="Symptoms.png" alt="Symptoms Icon" />
+      <h2>Symptoms</h2>
+      <p>Shortness of breath, throat tightness, and voice changes during episodes.</p>
+    </div>
+    <div class="card">
+      <img src="Treatment.png" alt="Treatment Icon" />
+      <h2>Treatment</h2>
+      <p>Breathing exercises, speech therapy techniques, and stress management strategies.</p>
+    </div>
+  </section>
 
-        <section class="cta">
-            <h2>Ready to Start Your Journey?</h2>
-            <p>Explore our guided breathing exercises to improve your breathing and manage VCD symptoms effectively.</p>
-            <a href="exercises.html" class="cta-btn">Start Exercises</a>
-        </section>
-    </main>
-</div>
+  <section class="cta">
+    <h2>Ready to Start Your Journey?</h2>
+    <p>Explore our guided breathing exercises to improve your breathing and manage VCD symptoms effectively.</p>
+    <a href="exercises.html" class="cta-btn">Start Exercises</a>
+  </section>
+</main>
+```
 
-<script>
-    const captchaCode = "1234"; 
-    const captchaDuration = 5 * 60 * 1000; 
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    let captchaCode = null;
+    const captchaDuration = 5 * 60 * 1000;
+
+    fetch("latest_code.txt")
+      .then(res => res.text())
+      .then(text => { captchaCode = text.trim(); });
 
     function checkCaptchaStatus() {
-        const lastSolved = localStorage.getItem("captchaSolvedAt");
-        if (lastSolved && Date.now() - parseInt(lastSolved) < captchaDuration) {
-            document.getElementById("captcha-screen").style.display = "none";
-            document.getElementById("site-content").style.display = "block";
-        }
+      const lastSolved = localStorage.getItem("captchaSolvedAt");
+      if (lastSolved && Date.now() - parseInt(lastSolved) < captchaDuration) {
+        document.getElementById("captcha-screen").style.display = "none";
+        document.getElementById("site-content").style.display = "block";
+      }
     }
 
     document.getElementById("captcha-submit").addEventListener("click", () => {
-        const input = document.getElementById("captcha-input").value;
-        if (input === captchaCode) {
-            localStorage.setItem("captchaSolvedAt", Date.now());
-            document.getElementById("captcha-screen").style.display = "none";
-            document.getElementById("site-content").style.display = "block";
-        } else {
-            document.getElementById("captcha-message").innerText = "Incorrect captcha. Try again.";
-        }
+      const input = document.getElementById("captcha-input").value;
+      if (input === captchaCode) {
+        localStorage.setItem("captchaSolvedAt", Date.now());
+        document.getElementById("captcha-screen").style.display = "none";
+        document.getElementById("site-content").style.display = "block";
+      } else {
+        document.getElementById("captcha-message").innerText = "Incorrect captcha. Try again.";
+      }
     });
 
     checkCaptchaStatus();
-</script>
-```
+  </script>
 
 </body>
 </html>
