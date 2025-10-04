@@ -1,36 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lunair - Captcha Gate</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body { margin:0; font-family:Arial,sans-serif; }
-    #captcha-container { 
-      display:flex; flex-direction:column; align-items:center; justify-content:center; 
-      height:100vh; background:#f0f0f0; 
-    }
-    #main-site { display:none; }
-    canvas { margin:10px 0; background:#eee; border-radius:5px; }
-    input,button { padding:10px; font-size:16px; margin:5px; }
-  </style>
+  <!-- Make sure this path points to your actual CSS file -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- Captcha Gate -->
   <div id="captcha-container">
     <h2>Verify You're Human</h2>
     <canvas id="captcha" width="200" height="60"></canvas>
-    <input type="text" id="captcha-input" placeholder="Enter Captcha">
+    <input type="text" id="captcha-input" placeholder="Enter Captcha" />
     <button onclick="checkCaptcha()">Submit</button>
     <p id="captcha-message" style="color:red;"></p>
   </div>
 
   <!-- Your actual site -->
-  <div id="main-site">
+  <div id="main-site" style="display:none;">
     <header>
       <div class="logo-container">
-        <img src="Lunair.png" alt="Lunair Logo" class="logo">
+        <img src="Lunair.png" alt="Lunair Logo" class="logo" />
       </div>
       <nav>
         <a href="index.html" class="active">Home</a>
@@ -40,7 +31,7 @@
 
     <main>
       <section class="content">
-        <img src="Lunair_White.png" alt="Lunair White Logo" class="logo-white">
+        <img src="Lunair_White.png" alt="Lunair White Logo" class="logo-white" />
         <h1>Welcome to Lunair</h1>
         <p>
           Vocal Cord Dysfunction (VCD) is a condition where the vocal cords close when they should open,
@@ -53,17 +44,17 @@
 
       <section class="info-cards">
         <div class="card">
-          <img src="Lungs.png" alt="Lungs Icon">
+          <img src="Lungs.png" alt="Lungs Icon" />
           <h2>What is VCD?</h2>
           <p>VCD is often mistaken for asthma but requires unique treatments focused on breathing control.</p>
         </div>
         <div class="card">
-          <img src="Symptoms.png" alt="Symptoms Icon">
+          <img src="Symptoms.png" alt="Symptoms Icon" />
           <h2>Symptoms</h2>
           <p>Shortness of breath, throat tightness, and voice changes during episodes.</p>
         </div>
         <div class="card">
-          <img src="Treatment.png" alt="Treatment Icon">
+          <img src="Treatment.png" alt="Treatment Icon" />
           <h2>Treatment</h2>
           <p>Breathing exercises, speech therapy techniques, and stress management strategies.</p>
         </div>
@@ -71,125 +62,124 @@
 
       <section class="cta">
         <h2>Ready to Start Your Journey?</h2>
-        <p>Explore our guided breathing exercises to improve your breathing and manage VCD symptoms effectively.</p>
+        <p>
+          Explore our guided breathing exercises to improve your breathing and manage VCD symptoms effectively.
+        </p>
         <a href="exercises.html" class="cta-btn">Start Exercises</a>
       </section>
     </main>
   </div>
 
-  <!-- FULL SCRIPT -->
- <script>
-function applyDarkModeFromStorage() {
-  const prefersDark = localStorage.getItem('darkMode') === 'enabled';
-  if (prefersDark) {
-    document.body.classList.add('dark-mode');
-  } else {
-    document.body.classList.remove('dark-mode');
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Apply dark mode if user has preference
-  applyDarkModeFromStorage();
-
-  // Dark mode toggle logic
-  const toggleBtn = document.getElementById('toggleThemeBtn');
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem('darkMode', 'enabled');
+  <script>
+    function applyDarkModeFromStorage() {
+      const prefersDark = localStorage.getItem("darkMode") === "enabled";
+      if (prefersDark) {
+        document.body.classList.add("dark-mode");
       } else {
-        localStorage.setItem('darkMode', 'disabled');
+        document.body.classList.remove("dark-mode");
       }
-      const mainLogo = document.querySelector('.logo');
-      const whiteLogo = document.querySelector('.logo-white');
-      if (mainLogo && whiteLogo) {
-        if (document.body.classList.contains('dark-mode')) {
-          mainLogo.src = 'Lunair_White.png';
-          whiteLogo.src = 'Lunair.png';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applyDarkModeFromStorage();
+
+      const toggleBtn = document.getElementById("toggleThemeBtn");
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          document.body.classList.toggle("dark-mode");
+          if (document.body.classList.contains("dark-mode")) {
+            localStorage.setItem("darkMode", "enabled");
+          } else {
+            localStorage.setItem("darkMode", "disabled");
+          }
+
+          const mainLogo = document.querySelector(".logo");
+          const whiteLogo = document.querySelector(".logo-white");
+          if (mainLogo && whiteLogo) {
+            if (document.body.classList.contains("dark-mode")) {
+              mainLogo.src = "Lunair_White.png";
+              whiteLogo.src = "Lunair.png";
+            } else {
+              mainLogo.src = "Lunair.png";
+              whiteLogo.src = "Lunair_White.png";
+            }
+          }
+        });
+      }
+
+      const captchaCanvas = document.getElementById("captcha");
+      const ctx = captchaCanvas ? captchaCanvas.getContext("2d") : null;
+      let captchaText = "";
+
+      function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function generateCaptcha() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+        ctx.fillStyle = "#f8fafc";
+        ctx.fillRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+
+        captchaText = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+        for (let i = 0; i < 4; i++) {
+          ctx.strokeStyle = `rgba(${rand(60, 180)},${rand(60, 180)},${rand(60, 180)},0.4)`;
+          ctx.beginPath();
+          ctx.moveTo(rand(0, 200), rand(0, 60));
+          ctx.lineTo(rand(0, 200), rand(0, 60));
+          ctx.stroke();
+        }
+
+        ctx.save();
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 32px 'Segoe UI', Arial, sans-serif";
+        ctx.shadowColor = "rgba(0,0,0,0.12)";
+        ctx.shadowBlur = 2;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+
+        for (let i = 0; i < captchaText.length; i++) {
+          ctx.save();
+          ctx.fillStyle = `rgb(${rand(40, 120)},${rand(40, 120)},${rand(40, 120)})`;
+          const x = 25 + i * 27 + rand(-3, 3);
+          const y = 30 + rand(-8, 8);
+          const angle = (rand(-20, 20) * Math.PI) / 180;
+          ctx.translate(x, y);
+          ctx.rotate(angle);
+          ctx.fillText(captchaText[i], 0, 0);
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+
+      function checkCaptcha() {
+        const input = document.getElementById("captcha-input").value.toUpperCase();
+        if (input === captchaText) {
+          localStorage.setItem("captchaVerified", Date.now());
+          document.getElementById("captcha-container").style.display = "none";
+          document.getElementById("main-site").style.display = "block";
+          applyDarkModeFromStorage();
         } else {
-          mainLogo.src = 'Lunair.png';
-          whiteLogo.src = 'Lunair_White.png';
+          document.getElementById("captcha-message").textContent = "Incorrect, try again.";
+          generateCaptcha();
+          document.getElementById("captcha-input").value = "";
         }
       }
+
+      window.checkCaptcha = checkCaptcha;
+
+      const lastVerified = localStorage.getItem("captchaVerified");
+      if (lastVerified && Date.now() - lastVerified < 10 * 60 * 1000) {
+        document.getElementById("captcha-container").style.display = "none";
+        document.getElementById("main-site").style.display = "block";
+        applyDarkModeFromStorage();
+      } else if (captchaCanvas) {
+        document.getElementById("captcha-container").style.display = "flex";
+        document.getElementById("main-site").style.display = "none";
+        generateCaptcha();
+      }
     });
-  }
-
-  // Captcha logic
-  const captchaCanvas = document.getElementById("captcha");
-  const ctx = captchaCanvas ? captchaCanvas.getContext("2d") : null;
-  let captchaText = "";
-
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function generateCaptcha() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, captchaCanvas.width, captchaCanvas.height);
-    ctx.fillStyle = "#f8fafc";
-    ctx.fillRect(0, 0, captchaCanvas.width, captchaCanvas.height);
-
-    captchaText = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-    // Draw noisy lines for distortion
-    for (let i = 0; i < 4; i++) {
-      ctx.strokeStyle = `rgba(${rand(60,180)},${rand(60,180)},${rand(60,180)},0.4)`;
-      ctx.beginPath();
-      ctx.moveTo(rand(0,200), rand(0,60));
-      ctx.lineTo(rand(0,200), rand(0,60));
-      ctx.stroke();
-    }
-
-    ctx.save();
-    ctx.textBaseline = "middle";
-    ctx.font = "bold 32px 'Segoe UI', Arial, sans-serif";
-    ctx.shadowColor = "rgba(0,0,0,0.12)";
-    ctx.shadowBlur = 2;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
-
-    for (let i = 0; i < captchaText.length; i++) {
-      ctx.save();
-      ctx.fillStyle = `rgb(${rand(40,120)},${rand(40,120)},${rand(40,120)})`;
-      const x = 25 + i * 27 + rand(-3,3);
-      const y = 30 + rand(-8,8);
-      const angle = rand(-20, 20) * Math.PI / 180;
-      ctx.translate(x, y);
-      ctx.rotate(angle);
-      ctx.fillText(captchaText[i], 0, 0);
-      ctx.restore();
-    }
-    ctx.restore();
-  }
-
-  function checkCaptcha() {
-    const input = document.getElementById("captcha-input").value.toUpperCase();
-    if (input === captchaText) {
-      localStorage.setItem("captchaVerified", Date.now());
-      document.getElementById("captcha-container").style.display = "none";
-      document.getElementById("main-site").style.display = "block";
-      applyDarkModeFromStorage();
-    } else {
-      document.getElementById("captcha-message").textContent = "Incorrect, try again.";
-      generateCaptcha();
-      document.getElementById("captcha-input").value = "";
-    }
-  }
-
-  window.checkCaptcha = checkCaptcha;
-
-  // On page load, decide what to show
-  const lastVerified = localStorage.getItem("captchaVerified");
-  if (lastVerified && Date.now() - lastVerified < 10 * 60 * 1000) {
-    document.getElementById("captcha-container").style.display = "none";
-    document.getElementById("main-site").style.display = "block";
-    applyDarkModeFromStorage();
-  } else if (captchaCanvas) {
-    document.getElementById("captcha-container").style.display = "flex";
-    document.getElementById("main-site").style.display = "none";
-    generateCaptcha();
-  }
-});
-</script>
+  </script>
+</body>
+</html>
