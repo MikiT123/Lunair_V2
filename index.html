@@ -78,86 +78,118 @@
   </div>
 
   <!-- FULL SCRIPT -->
-  <script>
-    function applyDarkModeFromStorage() {
-      const prefersDark = localStorage.getItem('darkMode') === 'enabled';
-      if (prefersDark) {
-        document.body.classList.add('dark-mode');
+ <script>
+function applyDarkModeFromStorage() {
+  const prefersDark = localStorage.getItem('darkMode') === 'enabled';
+  if (prefersDark) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Apply dark mode if user has preference
+  applyDarkModeFromStorage();
+
+  // Dark mode toggle logic
+  const toggleBtn = document.getElementById('toggleThemeBtn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
       } else {
-        document.body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'disabled');
       }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Apply dark mode if user has preference
-      applyDarkModeFromStorage();
-
-      // Dark mode toggle logic
-      const toggleBtn = document.getElementById('toggleThemeBtn');
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-          document.body.classList.toggle('dark-mode');
-          if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('darkMode', 'enabled');
-          } else {
-            localStorage.setItem('darkMode', 'disabled');
-          }
-          const mainLogo = document.querySelector('.logo');
-          const whiteLogo = document.querySelector('.logo-white');
-          if (mainLogo && whiteLogo) {
-            if (document.body.classList.contains('dark-mode')) {
-              mainLogo.src = 'Lunair_White.png';
-              whiteLogo.src = 'Lunair.png';
-            } else {
-              mainLogo.src = 'Lunair.png';
-              whiteLogo.src = 'Lunair_White.png';
-            }
-          }
-        });
-      }
-
-      // Captcha logic
-      const captchaCanvas = document.getElementById("captcha");
-      const ctx = captchaCanvas ? captchaCanvas.getContext("2d") : null;
-      let captchaText = "";
-
-      function generateCaptcha() {
-        if (!ctx) return;
-        ctx.clearRect(0, 0, captchaCanvas.width, captchaCanvas.height);
-        captchaText = Math.random().toString(36).substring(2, 8).toUpperCase();
-        ctx.font = "30px Arial";
-        ctx.fillStyle = "black";
-        ctx.fillText(captchaText, 40, 40);
-      }
-
-      function checkCaptcha() {
-        const input = document.getElementById("captcha-input").value.toUpperCase();
-        if (input === captchaText) {
-          localStorage.setItem("captchaVerified", Date.now());
-          document.getElementById("captcha-container").style.display = "none";
-          document.getElementById("main-site").style.display = "block";
-          applyDarkModeFromStorage();
+      const mainLogo = document.querySelector('.logo');
+      const whiteLogo = document.querySelector('.logo-white');
+      if (mainLogo && whiteLogo) {
+        if (document.body.classList.contains('dark-mode')) {
+          mainLogo.src = 'Lunair_White.png';
+          whiteLogo.src = 'Lunair.png';
         } else {
-          document.getElementById("captcha-message").textContent = "Incorrect, try again.";
-          generateCaptcha();
-          document.getElementById("captcha-input").value = "";
+          mainLogo.src = 'Lunair.png';
+          whiteLogo.src = 'Lunair_White.png';
         }
       }
-
-      window.checkCaptcha = checkCaptcha;
-
-      // On page load, decide what to show
-      const lastVerified = localStorage.getItem("captchaVerified");
-      if (lastVerified && Date.now() - lastVerified < 10 * 60 * 1000) {
-        document.getElementById("captcha-container").style.display = "none";
-        document.getElementById("main-site").style.display = "block";
-        applyDarkModeFromStorage();
-      } else if (captchaCanvas) {
-        document.getElementById("captcha-container").style.display = "flex";
-        document.getElementById("main-site").style.display = "none";
-        generateCaptcha();
-      }
     });
-  </script>
-</body>
-</html>
+  }
+
+  // Captcha logic
+  const captchaCanvas = document.getElementById("captcha");
+  const ctx = captchaCanvas ? captchaCanvas.getContext("2d") : null;
+  let captchaText = "";
+
+  function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function generateCaptcha() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+
+    captchaText = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    // Draw noisy lines for distortion
+    for (let i = 0; i < 4; i++) {
+      ctx.strokeStyle = `rgba(${rand(60,180)},${rand(60,180)},${rand(60,180)},0.4)`;
+      ctx.beginPath();
+      ctx.moveTo(rand(0,200), rand(0,60));
+      ctx.lineTo(rand(0,200), rand(0,60));
+      ctx.stroke();
+    }
+
+    ctx.save();
+    ctx.textBaseline = "middle";
+    ctx.font = "bold 32px 'Segoe UI', Arial, sans-serif";
+    ctx.shadowColor = "rgba(0,0,0,0.12)";
+    ctx.shadowBlur = 2;
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+
+    for (let i = 0; i < captchaText.length; i++) {
+      ctx.save();
+      ctx.fillStyle = `rgb(${rand(40,120)},${rand(40,120)},${rand(40,120)})`;
+      const x = 25 + i * 27 + rand(-3,3);
+      const y = 30 + rand(-8,8);
+      const angle = rand(-20, 20) * Math.PI / 180;
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillText(captchaText[i], 0, 0);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function checkCaptcha() {
+    const input = document.getElementById("captcha-input").value.toUpperCase();
+    if (input === captchaText) {
+      localStorage.setItem("captchaVerified", Date.now());
+      document.getElementById("captcha-container").style.display = "none";
+      document.getElementById("main-site").style.display = "block";
+      applyDarkModeFromStorage();
+    } else {
+      document.getElementById("captcha-message").textContent = "Incorrect, try again.";
+      generateCaptcha();
+      document.getElementById("captcha-input").value = "";
+    }
+  }
+
+  window.checkCaptcha = checkCaptcha;
+
+  // On page load, decide what to show
+  const lastVerified = localStorage.getItem("captchaVerified");
+  if (lastVerified && Date.now() - lastVerified < 10 * 60 * 1000) {
+    document.getElementById("captcha-container").style.display = "none";
+    document.getElementById("main-site").style.display = "block";
+    applyDarkModeFromStorage();
+  } else if (captchaCanvas) {
+    document.getElementById("captcha-container").style.display = "flex";
+    document.getElementById("main-site").style.display = "none";
+    generateCaptcha();
+  }
+});
+</script>
