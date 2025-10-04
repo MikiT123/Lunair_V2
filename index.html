@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lunair - Captcha Gate</title>
-  <!-- Make sure this path points to your actual CSS file -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,7 +13,7 @@
     <canvas id="captcha" width="200" height="60"></canvas>
     <input type="text" id="captcha-input" placeholder="Enter Captcha" />
     <button onclick="checkCaptcha()">Submit</button>
-    <p id="captcha-message" style="color:red;"></p>
+    <p id="captcha-message"></p>
   </div>
 
   <!-- Your actual site -->
@@ -73,11 +72,8 @@
   <script>
     function applyDarkModeFromStorage() {
       const prefersDark = localStorage.getItem("darkMode") === "enabled";
-      if (prefersDark) {
-        document.body.classList.add("dark-mode");
-      } else {
-        document.body.classList.remove("dark-mode");
-      }
+      if (prefersDark) document.body.classList.add("dark-mode");
+      else document.body.classList.remove("dark-mode");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -92,7 +88,6 @@
           } else {
             localStorage.setItem("darkMode", "disabled");
           }
-
           const mainLogo = document.querySelector(".logo");
           const whiteLogo = document.querySelector(".logo-white");
           if (mainLogo && whiteLogo) {
