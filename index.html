@@ -1,107 +1,78 @@
-<!DOCTYPE html>
+**index.html** (your main entry file):
 
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lunair - Home</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lunair V2 - Captcha</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f0f0; }
+    #captcha-container { text-align: center; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    canvas { margin: 10px 0; background: #eee; border-radius: 5px; }
+    input, button { padding: 10px; font-size: 16px; margin: 5px; }
+    #main-site { display: none; }
+  </style>
 </head>
 <body>
-  <div id="captcha-screen" class="captcha-overlay">
-    <div class="captcha-box">
-      <h2>Verify You’re Human</h2>
-      <img src="latest.png" alt="Captcha" class="captcha-image" />
-      <input type="text" id="captcha-input" placeholder="Enter Captcha" />
-      <button id="captcha-submit">Submit</button>
-      <p id="captcha-message"></p>
-    </div>
+  <div id="captcha-container">
+    <h2>Verify You're Human</h2>
+    <canvas id="captcha" width="200" height="60"></canvas>
+    <br>
+    <input type="text" id="captcha-input" placeholder="Enter Captcha">
+    <button onclick="checkCaptcha()">Submit</button>
+    <p id="captcha-message" style="color:red;"></p>
   </div>
 
-  <div id="site-content" style="display:none;">
-    <header>
-      <div class="logo-container">
-        <img src="Lunair.png" alt="Lunair Logo" class="logo" />
-      </div>
-      <nav>
-        <a href="index.html" class="active">Home</a>
-        <a href="exercises.html">Exercises</a>
-      </nav>
-    </header>
-
-```
-<main>
-  <section class="content">
-    <img src="Lunair_White.png" alt="Lunair White Logo" class="logo-white" />
-    <h1>Welcome to Lunair</h1>
-    <p>
-      Vocal Cord Dysfunction (VCD) is a condition where the vocal cords close when they should open,
-      making it difficult to breathe. It can cause symptoms like shortness of breath, throat tightness,
-      and voice changes. While often mistaken for asthma, VCD requires different treatments, including
-      breathing exercises and speech therapy techniques.
-    </p>
-    <button id="toggleThemeBtn" aria-label="Toggle dark mode">Toggle Dark Mode</button>
-  </section>
-
-  <section class="info-cards">
-    <div class="card">
-      <img src="Lungs.png" alt="Lungs Icon" />
-      <h2>What is VCD?</h2>
-      <p>VCD is often mistaken for asthma but requires unique treatments focused on breathing control.</p>
-    </div>
-    <div class="card">
-      <img src="Symptoms.png" alt="Symptoms Icon" />
-      <h2>Symptoms</h2>
-      <p>Shortness of breath, throat tightness, and voice changes during episodes.</p>
-    </div>
-    <div class="card">
-      <img src="Treatment.png" alt="Treatment Icon" />
-      <h2>Treatment</h2>
-      <p>Breathing exercises, speech therapy techniques, and stress management strategies.</p>
-    </div>
-  </section>
-
-  <section class="cta">
-    <h2>Ready to Start Your Journey?</h2>
-    <p>Explore our guided breathing exercises to improve your breathing and manage VCD symptoms effectively.</p>
-    <a href="exercises.html" class="cta-btn">Start Exercises</a>
-  </section>
-</main>
-```
-
+  <div id="main-site">
+    <iframe src="https://mikit123.github.io/Lunair_V2/" style="width:100vw; height:100vh; border:none;"></iframe>
   </div>
-
-  <script src="script.js"></script>
 
   <script>
-    let captchaCode = null;
-    const captchaDuration = 5 * 60 * 1000;
+    const captchaCanvas = document.getElementById("captcha");
+    const ctx = captchaCanvas.getContext("2d");
+    let captchaText = "";
 
-    fetch("latest_code.txt")
-      .then(res => res.text())
-      .then(text => { captchaCode = text.trim(); });
+    function generateCaptcha() {
+      ctx.clearRect(0, 0, captchaCanvas.width, captchaCanvas.height);
+      captchaText = Math.random().toString(36).substring(2, 8).toUpperCase();
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "black";
+      ctx.fillText(captchaText, 40, 40);
+    }
 
-    function checkCaptchaStatus() {
-      const lastSolved = localStorage.getItem("captchaSolvedAt");
-      if (lastSolved && Date.now() - parseInt(lastSolved) < captchaDuration) {
-        document.getElementById("captcha-screen").style.display = "none";
-        document.getElementById("site-content").style.display = "block";
+    function checkCaptcha() {
+      const input = document.getElementById("captcha-input").value.toUpperCase();
+      if (input === captchaText) {
+        localStorage.setItem("captchaVerified", Date.now());
+        document.getElementById("captcha-container").style.display = "none";
+        document.getElementById("main-site").style.display = "block";
+      } else {
+        document.getElementById("captcha-message").textContent = "Incorrect, try again.";
+        generateCaptcha();
       }
     }
 
-    document.getElementById("captcha-submit").addEventListener("click", () => {
-      const input = document.getElementById("captcha-input").value;
-      if (input === captchaCode) {
-        localStorage.setItem("captchaSolvedAt", Date.now());
-        document.getElementById("captcha-screen").style.display = "none";
-        document.getElementById("site-content").style.display = "block";
-      } else {
-        document.getElementById("captcha-message").innerText = "Incorrect captcha. Try again.";
-      }
-    });
-
-    checkCaptchaStatus();
+    // Timer: if user passed captcha within last 10 minutes, skip
+    const lastVerified = localStorage.getItem("captchaVerified");
+    if (lastVerified && Date.now() - lastVerified < 10 * 60 * 1000) {
+      document.getElementById("captcha-container").style.display = "none";
+      document.getElementById("main-site").style.display = "block";
+    } else {
+      generateCaptcha();
+    }
   </script>
-
 </body>
 </html>
+```
+
+---
+
+### 🔑 How it works
+
+* A **random 6-character string** is drawn on the `<canvas>`.
+* User must enter it correctly to proceed.
+* On success:
+
+  * The captcha box hides, and your website (`Lunair_V2`) loads in an `<iframe>`
