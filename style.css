@@ -5,11 +5,101 @@ body {
   color: #222;
 }
 
+/* Header/Nav improvements */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: #f0f0f0;
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+nav {
+  display: flex;
+  gap: 18px;
+  margin-left: 18px;
+}
+nav a {
+  text-decoration: none;
+  color: #226daa;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: color 0.2s;
+}
+nav a.active, nav a:hover {
+  color: #16395c;
+  border-bottom: 2px solid #98b7d1;
+}
+
+/* Logo and Images */
+.logo, .logo-white {
+  width: 110px;
+}
+.card img {
+  max-width: 140px;
+  margin-bottom: 15px;
+}
+
+/* Main content, center and spacing */
+.content {
+  margin-top: 30px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.cta {
+  margin-top: 50px;
+  text-align: center;
+}
+.cta-btn {
+  padding: 10px 30px;
+  background: #226daa;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.15em;
+  margin-top: 18px;
+  display: inline-block;
+  transition: background 0.2s;
+}
+.cta-btn:hover {
+  background: #154475;
+}
+
+/* Cards and responsiveness */
+.info-cards {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+.card {
+  flex: 1;
+  margin: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .info-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    width: 90vw;
+    margin: 18px 0;
+  }
+}
+
+/* Captcha Overlay */
 #captcha-container {
   position: fixed;
   top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100vw; height: 100vh;
   background: rgba(230, 240, 255, 0.96);
   display: flex;
   flex-direction: column;
@@ -78,44 +168,4 @@ body {
 .dark-mode #captcha {
   background: #263544;
   border-color: #346495;
-}
-
-@media (max-width: 600px) {
-  #captcha-container {
-    padding: 6vw;
-  }
-
-  #captcha {
-    width: 95vw !important;
-    max-width: 98vw !important;
-  }
-}
-
-.logo, .logo-white {
-  width: 120px;
-}
-
-.header, .logo-container {
-  display: flex;
-  align-items: center;
-}
-
-nav {
-  margin-left: 20px;
-}
-
-.info-cards {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-
-.card {
-  flex: 1;
-  margin: 10px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 16px;
-  text-align: center;
 }
