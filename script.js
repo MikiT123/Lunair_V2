@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('toggleThemeBtn');
   const mainLogo = document.querySelector('.logo');
   const whiteLogo = document.querySelector('.logo-white');
+  const mainLogo = document.querySelector('.logo');
+  if (mainLogo) {
+    if (document.body.classList.contains('dark-mode')) {
+      mainLogo.src = 'Lunair_White.png';
+    } else {
+      mainLogo.src = 'Lunair.png';
+    }
+  }
 
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
