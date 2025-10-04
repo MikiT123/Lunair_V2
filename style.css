@@ -161,6 +161,65 @@ nav a.active, nav a:hover {
   color: #e4e9f0;
 }
 
+.dark-mode header {
+  background: #182432;
+}
+
+.dark-mode nav a {
+  color: #a8bbd6;
+}
+
+.dark-mode nav a.active,
+.dark-mode nav a:hover {
+  color: #f0f6ff;
+  border-bottom-color: #90a9d3;
+}
+
+.dark-mode .logo-container img {
+  filter: brightness(0) invert(1);
+}
+
+.dark-mode .content p,
+.dark-mode .content h1 {
+  color: #dce6f3;
+}
+
+.dark-mode .card {
+  background: #263544;
+  box-shadow: 0 2px 10px rgba(20, 30, 40, 0.8);
+  color: #d0dae7;
+}
+
+.dark-mode .exercise-card {
+  background: #263544;
+  box-shadow: 0 2px 10px rgba(20, 30, 40, 0.8);
+  color: #d0dae7;
+}
+
+.dark-mode .exercise-link {
+  background: #364f73;
+  color: #d0dae7;
+  border: none;
+}
+
+.dark-mode .exercise-link:hover {
+  background: #1a2a47;
+  color: #f0f6ff;
+}
+
+.dark-mode .cta {
+  color: #dce6f3;
+}
+
+.dark-mode .cta-btn {
+  background: #2e4975;
+  color: #e4e9f0;
+}
+
+.dark-mode .cta-btn:hover {
+  background: #1a2a47;
+}
+
 .dark-mode #captcha-container {
   background: rgba(20, 30, 40, 0.95);
 }
@@ -169,6 +228,26 @@ nav a.active, nav a:hover {
   background: #263544;
   border-color: #346495;
 }
+
+.dark-mode #captcha-input {
+  background: #364f73;
+  border-color: #47639c;
+  color: #dce6f3;
+}
+
+.dark-mode #captcha-message {
+  color: #e87c7c;
+}
+
+.dark-mode #captcha-container button {
+  background: #2e4975;
+  color: #f0f6ff;
+}
+
+.dark-mode #captcha-container button:hover {
+  background: #1a2a47;
+}
+
 
 /* Exercise Page: Exercise boxes/cards */
 .exercise-cards {
