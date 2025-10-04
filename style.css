@@ -219,3 +219,44 @@ nav a.active, nav a:hover {
     max-width: 98vw;
   }
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lunair - Exercises</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="Lunair.png" alt="Lunair Logo" class="logo" />
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="exercises.html" class="active">Exercises</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h1>Breathing Exercises</h1>
+            <p>Here are some helpful exercises for managing VCD:</p>
+            <div class="exercise-cards">
+                <div class="exercise-card">
+                    <a href="https://www.youtube.com/shorts/v0Yj9HjgR64" target="_blank" class="exercise-link">Diaphragmatic Breathing</a>
+                </div>
+                <div class="exercise-card">
+                    <a href="https://www.youtube.com/shorts/6ctvwEBQJtk" target="_blank" class="exercise-link">Rescue Breathing Technique</a>
+                </div>
+                <div class="exercise-card">
+                    <a href="https://www.youtube.com/shorts/CMbxL5aOhgo" target="_blank" class="exercise-link">Relaxation Breathing</a>
+                </div>
+            </div>
+            <button id="toggleThemeBtn" aria-label="Toggle dark mode" style="margin-top: 25px;">Toggle Dark Mode</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+
